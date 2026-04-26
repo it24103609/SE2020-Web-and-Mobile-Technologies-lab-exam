@@ -8,16 +8,31 @@ function ItemForm({ initialValues, onSubmit, submitText }) {
       price: "",
       description: "",
       imageUrl: "",
+      supplierName: "",
     }
   );
+  const [supplierNameError, setSupplierNameError] = useState("");
+
+  const validateSupplierName = (name) => {
+    if (!name.trim()) return "Supplier Name is required.";
+    if (name.length < 2) return "Supplier Name must be at least 2 characters.";
+    if (!/^[a-zA-Z0-9\s.,'-]+$/.test(name)) return "Supplier Name contains invalid characters.";
+    return "";
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "supplierName") {
+      setSupplierNameError(validateSupplierName(value));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const error = validateSupplierName(formData.supplierName);
+    setSupplierNameError(error);
+    if (error) return;
     onSubmit({
       ...formData,
       price: Number(formData.price),
@@ -54,6 +69,17 @@ function ItemForm({ initialValues, onSubmit, submitText }) {
 
       <label>Image URL</label>
       <input name="imageUrl" value={formData.imageUrl} onChange={handleChange} />
+
+      <label>Supplier Name</label>
+      <input
+        name="supplierName"
+        value={formData.supplierName}
+        onChange={handleChange}
+        required
+      />
+      {supplierNameError && (
+        <div style={{ color: "red", marginBottom: "8px" }}>{supplierNameError}</div>
+      )}
 
       <button className="btn primary" type="submit">{submitText}</button>
     </form>
