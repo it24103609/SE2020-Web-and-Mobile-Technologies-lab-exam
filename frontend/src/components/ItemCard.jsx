@@ -12,6 +12,7 @@ function ItemCard({ item, onDelete }) {
     
       <p><strong>Category:</strong> {item.category}</p>
       <p><strong>Price:</strong> ${item.price}</p>
+      <p><strong>Supplier:</strong> {item.supplierName}</p>
       <p>{item.description}</p>
 
       <div className="card-actions">
